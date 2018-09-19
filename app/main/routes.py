@@ -9,10 +9,10 @@ TO DO:
 
 Make 3 JSON Endpoints using Yelp API
 
-/yelp/categories
-Only categories in the US
+[X]/yelp/categories
+--Only categories in the US
 
-/yelp/businesses/search
+[]/yelp/businesses/search
 • Requests a list of 10 matching businesses within a radius
 • Accept the following query string parameters:
 • latitude (required)
@@ -21,7 +21,7 @@ Only categories in the US
 • categories (optional)
 Return a JSON list of business objects with IDs, names, and coordinates.
 
-/yelp/businesses/details/<string:id>
+[]/yelp/businesses/details/<string:id>
 Gets business details from Yelp using the provided ID. Return the full response under a
 "data" key, as in the above examples.
 
@@ -48,13 +48,16 @@ def getJSON(url, auth):
 
 @bp.route('/')
 def index():
-    data = getJSON(ALL_US_CATEGORIES_URL, headers)
-    resp = jsonify(data)
-    return resp
+    return render_template('index.html')
 
 @bp.route('/yelp/categories')
 def yelpCat():
-    return render_template('index.html')
+    cat_dict = {"data":[]}
+    data = getJSON(ALL_US_CATEGORIES_URL, headers)
+    for x in data['categories']:
+        cat_dict["data"].append(x['title'])
+    resp = jsonify(cat_dict)
+    return resp
 
 @bp.route('/yelp/businesses/search')
 def yelpBus():
@@ -63,3 +66,15 @@ def yelpBus():
 @bp.route('/yelp/businesses/details/<string:id>')
 def yelpSingBus():
     return render_template('index.html')
+
+# Error Handlin'
+
+@bp.app_errorhandler(404)
+def not_found(error):
+    return "Quoth the Raven, 404"
+
+@bp.app_errorhandler(500)
+def internal_error(error):
+    return "I will code 500 errorm And I will code 500 more, \
+            just to be the internal server \
+            error that fried down at your door. DAH DAH DAH"
