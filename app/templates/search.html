@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<form action="" method="POST">
+    {{form.hidden_tag()}}
+    <p>
+        {{form.latitude.label}}<br/>
+        {{form.latitude()}}<br/>
+        {% for error in form.latitude.errors %}
+        <div class="alert alert-danger">{{error}}</div>
+        {% endfor %}
+    </p>
+    <p>
+        {{form.longitude.label }}<br/>
+        {{form.longitude()}}<br/>
+        {% for error in form.longitude.errors %}
+        <div class="alert alert-danger">{{error}}</div>
+        {% endfor %}
+    </p>
+    <p>
+        {{form.radius.label }}<br/>
+        {{form.radius()}}<br/>
+        {% for error in form.radius.errors %}
+        <div class="alert alert-danger">{{error}}</div>
+        {% endfor %}
+    </p>
+    <p>
+        {{form.categories.label }}<br/>
+        {{form.categories()}}<br/>
+        {% for error in form.categories.errors %}
+        <div class="alert alert-danger">{{error}}</div>
+        {% endfor %}
+    </p>
+    <p>
+        {{form.search()}}
+    </p>
+</form>
+{% endblock %}

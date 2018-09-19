@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<form action="" method="POST">
+    {{form.hidden_tag()}}
+    <p>
+        {{form.business_id.label}}<br/>
+        {{form.business_id()}}
+    </p>
+    <p>
+        {{form.viewBusiness()}}
+    </p>
+</form>
+{% endblock %}
