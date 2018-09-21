@@ -7,38 +7,54 @@ import requests
 
 
 # Function for Requests
+# url = yelp Fusion API endpoint
+# auth = headers from app.main.secrets
 def getJSON(url, auth):
     r = requests.get(url, headers=auth)
     data = r.json()
     return data
 
 
+# Homepage
 @bp.route('/')
 def index():
     return render_template('index.html')
 
 
+# List of yelp api categories, all
 @bp.route('/yelp/categories')
 def yelpCat():
+    # Custom JSON dict
     cat_dict = {"data": []}
+    # All categories endpoint set to US location
     ALL_US_CATEGORIES_URL = "https://api.yelp.com/v3/categories?locale=en_US"
+    # Request
     data = getJSON(ALL_US_CATEGORIES_URL, headers)
+    # Iterate list of categories and
+    # append it to predefined dict by title
     for x in data['categories']:
         cat_dict["data"].append(x['title'])
     resp = jsonify(cat_dict)
     return resp
 
 
+# Form to search and return yelp api list
 @bp.route('/yelp/businesses/search', methods=['GET', 'POST'])
 def yelpBus():
     search_results = {"data": []}
+    # WTForm
     form = searchYelpForm()
     if form.validate_on_submit():
+        # Assign data to relevant variables
         LONG = str(form.longitude.data)
         LAT = str(form.latitude.data)
         RADIUS = str(form.radius.data)
+        # Build yelp endpoint with search terms
         SEARCH_URL = "https://api.yelp.com/v3/businesses/search?latitude=" + \
             LAT + "&longitude=" + LONG + "&limit=10&radius=" + RADIUS
+        # Categories field is optional
+        # only add it if its filled
+        # Otherwise, error
         if form.categories.data:
             FOOD_CAT = "&categories="
             FOOD_CAT_OP = form.categories.data
