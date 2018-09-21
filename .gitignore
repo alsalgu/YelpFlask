@@ -111,3 +111,4 @@ dmypy.json
 
 # Config
 config.py
+secrets.py

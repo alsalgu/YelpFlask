@@ -1,7 +1,7 @@
 from flask import render_template, current_app, redirect
 from flask import request, jsonify, url_for, flash
 from app.main import bp
-from app.main.config import headers
+from app.main.secrets import headers
 from app.main.forms import searchYelpForm, businessIDForm
 import requests
 
