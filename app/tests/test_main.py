@@ -25,17 +25,24 @@ class Test(TestCase):
         # Lists of 404 paths, which should redirect.
         redirect_routes = ['/not-real', '/yelp/businesses/details/fake-business' ]
         for route in written_routes:
-            result = self.client.get(route)
-            self.assertEqual(result.status_code, 200, route + ' failed.')
+            response = self.client.get(route)
+            self.assertEqual(response.status_code, 200, route + ' failed.')
         for route in redirect_routes:
-            result = self.client.get(route)
-            self.assertEqual(result.status_code, 302, route + ' failed.')
+            response = self.client.get(route)
+            self.assertEqual(response.status_code, 302, route + ' failed.')
 
-    def test_2(self):
-        self.assertTrue(True)
- 
-    def test_3(self):
-        self.assertTrue(True)
+    def test_JSON(self):
+        # Paths that list JSON
+        json_routes = ['/yelp/categories']
+        for route in json_routes:
+            response = self.client.get(route)
+            assert "data" in response.json
+    
+    def test_POST(self):
+        routes_with_POST = ['/yelp/businesses/search', '/yelp/businesses/details/']
+        for route in routes_with_POST:
+            response = self.client.post(route)
+            self.assertEqual(response.status_code, 200, route + ' failed.')
 
 if __name__ == '__main__':
     unittest.main()
